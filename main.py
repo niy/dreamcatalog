@@ -19,9 +19,9 @@ st.title("Product Image Generator")
 col_api_keys_rbg, col_api_keys_oai = st.columns(2)
 # Read API keys from user input filled with environment variables as default values\
 with col_api_keys_rbg:
-    remove_bg_api_key = st.text_input("Remove.bg API Key", value=os.environ["REMOVE_BG_API_KEY"])
+    remove_bg_api_key = st.text_input("Remove.bg API Key", value=os.getenv("REMOVE_BG_API_KEY", ""), type="password")
 with col_api_keys_oai:
-    openai_api_key = st.text_input("OpenAI API Key", value=os.environ["OPENAI_API_KEY"])
+    openai_api_key = st.text_input("OpenAI API Key", value=os.getenv("OPENAI_API_KEY", ""), type="password")
 
 # Create UI elements for file upload, product type selection, and scene definition
 image_files = st.file_uploader("Upload Product Images", type=["png", "jpg", "jpeg"], accept_multiple_files=True)
