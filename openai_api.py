@@ -16,17 +16,18 @@ class OpenAiApi:
         pass
 
     @staticmethod
-    async def generate_image_with_mask(img: Image, mask: Image, prompt) -> str:
+    async def generate_images_with_mask(img: Image, mask: Image, prompt, variations_no=5) -> list[str]:
         """
         Generate an image with the given mask using the DALL-E API.
 
         Args:
-            img (PIL.Image.Image): The input image.
-            mask (PIL.Image.Image): The mask to be used in the generated image.
-            prompt (str): The prompt to be used in DALL-E API.
+            :param img: (PIL.Image.Image) The input image.
+            :param mask: (PIL.Image.Image) The mask to be used in the generated image.
+            :param prompt: (str) The prompt to be used in DALL-E API.
+            :param variations_no: (int) The number of variations to be generated.
 
         Returns:
-            str: The URL of the generated image.
+            list[str]: A list of URLs of the generated images (based on the number of variations).
         """
         img_bytes = BytesIO()
         img.save(img_bytes, format="PNG")
@@ -39,7 +40,8 @@ class OpenAiApi:
             image=img_bytes,
             mask=mask_bytes,
             prompt=prompt,
-            n=1,
+            n=variations_no,
             size="512x512"
         )
-        return response['data'][0]['url']
+
+        return [image['url'] for image in response['data']]
