@@ -30,8 +30,6 @@ scene_definition = st.text_input("Scene Definition", max_chars=1000,
                                  placeholder="a swiss cheese plant on top of a table in a bright hotel room with a view of the ocean in the background",
                                  help="Enter a description of the scene you want to generate.")
 
-variations_no = st.slider("Number of Variations", min_value=1, max_value=10, value=2, step=1)
-
 # Add a selection box for the user to choose the background removal API
 # api_options = ["Rembg (free)", "Remove.bg (paid)"]
 # selected_api = st.selectbox("Choose background removal API:", api_options)
@@ -50,7 +48,7 @@ async def process_images():
     # Use the masks to generate new images with DALL-E API
     async with OpenAiApi(openai_api_key) as openai_api:
         image_urls = await asyncio.gather(
-            *[openai_api.generate_images_with_mask(original_image, no_bg_image, scene_definition, variations_no) for
+            *[openai_api.generate_image_with_mask(original_image, no_bg_image, scene_definition) for
               original_image, no_bg_image in bg_removed_pairs]
         )
     return image_urls, bg_removed_pairs
